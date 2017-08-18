@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Last Chat</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="col-md-2 userlist">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-user"></span> Online ({{ connectedUsers.length }})
+            </div>
+            <ul class="chat">
+                <li v-for="user in connectedUsers">
+                    {{ user }}&nbsp;
+                    <p v-if="userIsTyping(user)"> <span class="glyphicon glyphicon-comment"></span>&nbsp; <em class="typingMessage"> is typing a message...</em></p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-10">
+            <div id="livechat-container">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        &nbsp;Lets Chat
+                    </div>
+                    <div class="panel-body">
+                        <ul class="chat" id="messages">
+                            <li v-for="message in messages" class="left clearfix">
+                                <div class="info">
+                                    {{ message.msg }}
+                                </div>
+                                <div>
+                                    <span class="chat-img pull-left">
+                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                                    </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">{{ message.user }}</strong> <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>&nbsp;{{ message.timestamp }}</small>
+                                        </div>
+                                        <p>
+                                            {{ message.text }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="panel-footer">
+                        <form @submit.prevent="send">
+                            <input v-model="message.text" v-on:keyup="usersAreTyping" v-on:keyup.13="stoppedTyping('13')" v-on:keyup.8="stoppedTyping('8')"
+                                type="text" class="form-control input-lg" placeholder="Type chat here" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="client.js"></script>
+</body>
+
+</html>
